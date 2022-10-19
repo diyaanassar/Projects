@@ -1,0 +1,98 @@
+/* Unit concerter
+Converts units and returns them
+Author: Diyaa Nassar- nassard@bc.edu
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#define MAX_UNIT_LENGTH 4
+#define CM_TO_IN 2.54
+#define MM_PER_CM 10
+#define CM_PER_M 100
+#define CM_PER_KM 100000
+#define IN_PER_FT 12
+#define IN_PER_YD 36
+#define IN_PER_MI 63360
+
+double mm_to_in (const double value) {
+    return ((value / (MM_PER_CM)) / CM_TO_IN);
+}
+double cm_to_in (const double value) {
+    return(value / CM_TO_IN);
+}
+double m_to_y (const double value) {
+    return (((value * CM_PER_M) / CM_TO_IN) / IN_PER_YD);
+}
+double km_to_mi (const double value) { 
+    return (((value * CM_PER_KM) / CM_TO_IN) / IN_PER_MI);
+}
+double in_to_cm (const double value) {
+    return (value * CM_TO_IN);
+}
+double ft_to_m (const double value) {
+    return (((value * IN_PER_FT) * CM_TO_IN) / CM_PER_M);
+}
+
+double yd_to_m (const double value) {
+    return (((value * IN_PER_YD) * CM_TO_IN) / CM_PER_M); 
+}
+
+double mi_to_km (const double value) {
+    return (((value * IN_PER_MI) * CM_TO_IN) / CM_PER_KM);
+}
+
+double convert (const double value, const char * const unit, char ** output_unit){
+    if (! strcmp(unit, "mm")) {
+        *output_unit = "in";
+        return mm_to_in(value);
+}   
+    else if (! strcmp(unit, "cm")) {
+        *output_unit = "in";
+        return cm_to_in(value);
+}   
+    else if (! strcmp(unit, "m")) {
+        *output_unit = "yd";
+        return m_to_y(value);
+}   
+    else if (! strcmp(unit, "km")) {
+        *output_unit = "mi";
+        return km_to_mi(value);
+}   
+    else if (! strcmp(unit, "in")) {
+        *output_unit = "cm";
+        return in_to_cm(value);
+}   
+    else if (! strcmp(unit, "ft")) {
+        *output_unit = "m";
+        return ft_to_m(value);
+}   
+    else if (! strcmp(unit, "yd")) {
+        *output_unit = "m";
+        return yd_to_m(value);
+}   
+    else if (! strcmp(unit, "mi")) {
+        *output_unit = "km";
+        return mi_to_km(value);
+} 
+return NAN;
+}
+int main() {
+    int value;
+    char unit[MAX_UNIT_LENGTH];
+    char *output_unit;
+    printf ("Please enter a length to convert, in the form <number unit> \n Enter any letter to quit\n > ");
+    while ((scanf("%d %s", &value, unit))){
+        unit[MAX_UNIT_LENGTH - 1] = '\0';
+        double result = convert(value, unit, &output_unit);
+        if (isnan(result) == 0) {
+            printf("%d %s = %lf %s\n >", value, unit, result, output_unit);
+        } 
+        else {
+            printf("Allowable units: mm, cm, m, km, in, ft, yd, mi \n");
+  }
+ }
+return EXIT_SUCCESS;
+}
